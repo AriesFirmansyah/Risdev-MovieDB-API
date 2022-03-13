@@ -1,9 +1,10 @@
 exports.createUser = (req, res, next) => {
+    console.log("request : ", req.body);
     res.json({
         message: 'create successed',
         data: {
             id: 1,
-            name: 'tes'
+            name: req.body.name
         }
 
     });
