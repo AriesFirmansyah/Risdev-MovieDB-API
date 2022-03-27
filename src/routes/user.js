@@ -1,10 +1,18 @@
 const express = require('express');
+const {body} = require('express-validator');
 
 const router = express.Router();
 
-const usersController = require('../controllers/users');
+const usersController = require('../controllers/user');
 
-router.post('/create', usersController.createUser);
+router.post('/create', 
+    // Validation
+    [
+        body('name').isLength({min: 5}).withMessage(' input nama tidak sesuai'),
+        body('body').isLength({min: 5}).withMessage(' input body tidak sesuai'),
+    ],    
+    usersController.createUser
+);
 router.get('/users', usersController.getAllUser);
 
 
