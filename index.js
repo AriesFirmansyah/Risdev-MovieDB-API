@@ -4,11 +4,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
-
+const moment = require('moment');
+const fs = require('fs');
 
 const usersRoutes = require('./src/routes/user');
 const authRoutes = require('./src/routes/auth');
 const movieRoutes = require('./src/routes/movies');
+
+const dbConnectAtlas = 'mongodb+srv://ariesfirmansyah:rH2gCOAzVtg6px3a@cluster0.uuvaw.mongodb.net/MovieDB?retryWrites=true&w=majority';
+const dbConnectLocal = 'mongodb://localhost:27017/MovieDB';
 
 const server = express();
 
@@ -20,7 +24,9 @@ const fileStorage = multer.diskStorage({
         callback(null, 'images');
     },
     filename: (req, file, callback) => {
-        callback(null, new Date().getTime() + '-' + file.originalname);
+        const date = new Date().getTime();
+        const imageName = moment(date).format('LL') + ' - ' + date + file.originalname;
+        callback(null, imageName.toString());
     }
 });
 
@@ -43,13 +49,12 @@ server.use(
     }).single('image')
 );
 
-
 server.use((req, res, next) => {
     console.log('server accessed...');
     next();
 })
 
-server.use('/v1/users', usersRoutes);
+server.use('/v1/user', usersRoutes);
 server.use('/v1/auth', authRoutes);
 server.use('/v1/movies', movieRoutes);
 
@@ -65,7 +70,7 @@ server.use((error, req, res, next) => {
     })
 });
 
-mongoose.connect('mongodb+srv://ariesfirmansyah:rH2gCOAzVtg6px3a@cluster0.uuvaw.mongodb.net/MovieDB?retryWrites=true&w=majority')
+mongoose.connect(dbConnectLocal)
 .then(() => {
     server.listen(4000, () => console.log('DB Connected'));
 })

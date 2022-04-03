@@ -1,9 +1,9 @@
 const express = require('express');
-const {body} = require('express-validator');
+const { body } = require('express-validator');
 
 const router = express.Router();
 
-const usersController = require('../controllers/user');
+const userController = require('../controllers/user');
 
 router.post('/create', 
     // Validation
@@ -11,20 +11,17 @@ router.post('/create',
         body('name').isLength({min: 5}).withMessage(' input nama tidak sesuai'),
         body('body').isLength({min: 5}).withMessage(' input body tidak sesuai'),
     ],    
-    usersController.createUser
+    userController.createUser
 );
-router.get('/users', usersController.getAllUser);
-
-
-// router.use('/users', (req, res, next) => {
-//     console.log('request url : ', req.originalUrl);
-//     console.log('request method : ', req.method);
-
-//     res.json({
-//         name : "Aries Firmansyah"
-//     });
-    
-//     next();
-// })
+router.get('/getusers', userController.getAllUser);
+router.get('/getuser/:userid', userController.getUserById);
+router.put('/updateuser/:userid', 
+    [
+        body('name').isLength({min: 5}).withMessage(' input nama tidak sesuai'),
+        body('body').isLength({min: 5}).withMessage(' input body tidak sesuai'),
+    ],   
+    userController.updateUser
+);
+router.delete('/delete/:userid', userController.deleteUser);
 
 module.exports = router;

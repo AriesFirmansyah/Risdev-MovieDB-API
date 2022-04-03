@@ -1,0 +1,12 @@
+
+
+
+DONE 1.  Update validation, if updated, 
+         then remove previous image.
+DONW 2.  Create validation, if create failed, 
+         then remove image.
+         
+3. Create validation when username is existing, 
+   then remove image for refused.
+4. When update, check image to deleted, whether there are
+   other user using the same name or not

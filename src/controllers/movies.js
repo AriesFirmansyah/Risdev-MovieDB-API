@@ -30,3 +30,8 @@ exports.createMovie = (req, res, next) => {
 
     res.status(201).json(result);
 }
+
+
+exports.getAllFavorite = (req, res, next) => {
+    
+}

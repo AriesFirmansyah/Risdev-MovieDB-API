@@ -1,9 +1,9 @@
-Standar API
+#Standar API
 
 {root.api}/{version}/{grouping}/{endpoint}
-http://localhost:4000/v1/auth/login
+ex : http://localhost:4000/v1/auth/login
 
-Standar Status Response
+#Standar Status Response
 
 200 - OK                        --> Call API Success.
 201 - CREATED                   --> Post Success.
@@ -14,7 +14,7 @@ Standar Status Response
 500 - INTERNAL SERVER ERROR     --> Error on Server Side
 502 - BAD GATEWAY               --> Invalid Response From Another Request
 
-GROUP : Authentication
+#GROUP : Authentication
 
 [1] - Register
 {root.api}/{version}/auth/register
@@ -49,12 +49,21 @@ error-response
 {root.api}/{version}/auth/login
 
 req : {
-    
+    "email or phone number": "aries@gmail.com",
+    "password": "1234",
+}
+
+res : {
+    "message": "Register Success",
+    "data": {
+        "email or phone number": "aries@gmail.com",
+        "password": "1234",
+    }
 }
 
 
 
-GROUP : MOVIE FAVORITE
+#GROUP : MOVIE FAVORITE
 
 [1] - Create User Movie Favorite
 {root.api}/{version}/movies/postfavorite

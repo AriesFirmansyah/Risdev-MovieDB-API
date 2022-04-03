@@ -16,4 +16,5 @@ router.post(
     moviesController.createMovie
 );
 
+router.get('/favorite', moviesController.getAllFavorite);
 module.exports = router;
