@@ -1,0 +1,15 @@
+
+#GET USERS
+GET http://localhost:4000/v1/user/getusers
+
+###
+
+
+#LOGIN
+POST http://localhost:4000/v1/auth/login
+Content-Type: application/json
+
+{
+    "username" : "Aris",
+    "password" : "password"
+}

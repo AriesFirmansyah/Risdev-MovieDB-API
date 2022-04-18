@@ -2,10 +2,11 @@ const { validationResult } = require('express-validator');
 const path = require('path');
 const fs = require('fs');
 const User = require('../models/user');
-const user = require('../models/user');
 const images_path = './images';
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-exports.createUser = (req, res, next) => {
+exports.createUser = async (req, res, next) => {
     // ERROR HANDLING
     const errors = validationResult(req);
 
@@ -24,30 +25,67 @@ exports.createUser = (req, res, next) => {
         throw err;
     }
 
-    const name = req.body.name;
-    const body = req.body.body;
+    const { 
+        fullname,
+        email, 
+        password, 
+        phone_number, 
+        occupation, 
+        region 
+    } = req.body;
+
     const image = req.file.path;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    // console.log(hashedPassword)
 
     const Users = new User({
-        name: name,
-        body: body,
-        image: image
+        fullname        : fullname,
+        email           : email,
+        password        : hashedPassword,
+        phone_number    : phone_number,
+        image           : image,
+        occupation      : occupation,
+        region          : region,
     });
 
-    Users.save()
-    .then((results) => {
-        const result = {
-            message: "Create successed!",
-            data: results
+    User.find({ email }).countDocuments()
+    .then((count) => {
+        if (count !== 0) {
+            cleanImage(req.file.path);
+            res.status(400).json({
+                message: "Email has been used, please login or input another value!",
+            });
+            next();
+        } else {
+            Users.save()
+            .then((result) => {
+                const token = jwt.sign(
+                    { email: result.email, id: result._id },  
+                    process.env.ACCESS_TOKEN,
+                    { expiresIn: "1h" }
+                );
+
+                res.status(201).json({
+                    message: "Create successed!",
+                    data: result,
+                    token: token,
+                });
+                // next();
+            })
+            .catch(err => {
+                cleanImage(req.file.path);
+                res.status(400).json({
+                    message: "Error!",
+                });
+                // next(err);
+            });
         }
-    
-        res.status(201).json(result);
-        next();
     })
     .catch(err => {
-        console.log(err);
+        next(err);
     });
-    // next();
+
+    
 };
 exports.getAllUser = (req, res, next) => {
     const currentPage = req.query.page || 1;
@@ -91,74 +129,83 @@ exports.getUserById = (req, res, next) => {
         });
     })
     .catch((err) => {
-        res.status(400).json({
-            message: 'User id tidak valid!',
-            data: err
-        })
-        next();
+        next(err);
     });
 };
 exports.updateUser = (req, res, next) => {
+
+    // Middleware
+    if (!req.userId) return res.json({ message: "Unauthecticated! Please login." });
+
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
         if(req.file) cleanImage(req.file.path);
-        
+
         const err = new Error('Invalid Value');
         err.errorStatus = 400;
         err.data = errors.array();
         throw err;
     }
 
-    if(!req.file) {
-        const err = new Error('Image harus di upload');
-        err.errorStatus = 422;
-        throw err;
-    }
+    const { 
+        fullname,
+        phone_number, 
+        occupation, 
+        region 
+    } = req.body;
 
-    const name = req.body.name;
-    const body = req.body.body;
-    const image = req.file.path;
     const uid = req.params.userid;
+    let image;
 
-    // console.log(req.file.path);
+    if (req.file) image = req.file.path;
 
-    User.findById(uid)
-    .then((user) => {
-        if (!user) {
+    User.findById(uid).countDocuments()
+    .then((count) => {
+        if(count === 0) {
             const err = new Error('User tidak ditemukan!');
             err.errorStatus = 404;
             throw err;
-        }
+        } else {
+            User.findById(uid)
+            .then((user) => {
+                if (!req.file) {
+                    image = user.image;
+                } 
 
-        user.name = name;
-        user.body = body;
-        user.image = image;
-
-        return user.save();
-    })
-    .then((result) => {
-        cleanImagesDirectory();
-        const response = {
-            message: "Update successed!",
-            data: result
+                user.fullname        = fullname;
+                user.phone_number    = phone_number;
+                user.image           = image;
+                user.occupation      = occupation;
+                user.region          = region;
+        
+                return user.save();
+            })
+            .then((result) => {
+                cleanImagesDirectory();
+                const response = {
+                    message: "Update successed!",
+                    data: result
+                }
+                res.status(200).json(response);
+            })
+            .catch((err) => {
+                cleanImage(image);
+                next(err);
+            })
         }
-        res.status(200).json(response);
     })
     .catch((err) => {
-        cleanImage(image);
-        res.status(400).json({
-            message: 'User id tidak valid!',
-            data: err
-        });
-        next();
+        if (req.file) cleanImage(image);
+        next(err);
     })
+    
 };
 
 exports.deleteUser = (req, res, next) => {
     const uid = req.params.userid;
 
-    console.log(uid);
+    // console.log(uid);
 
     User.findById(uid)
     .then((user) => {
@@ -177,11 +224,7 @@ exports.deleteUser = (req, res, next) => {
         })
     })
     .catch((err) =>  {
-        res.status(400).json({
-            message: 'User id tidak valid!',
-            data: err
-        });
-        next();
+        next(err);
     })
 }
 
@@ -210,7 +253,7 @@ const cleanImagesDirectory = () => {
           });
     })
     .catch((err) => {
-        console.log('tes');
+        console.log(err);
     })
     
 }

@@ -14,6 +14,8 @@ const movieRoutes = require('./src/routes/movies');
 const dbConnectAtlas = 'mongodb+srv://ariesfirmansyah:rH2gCOAzVtg6px3a@cluster0.uuvaw.mongodb.net/MovieDB?retryWrites=true&w=majority';
 const dbConnectLocal = 'mongodb://localhost:27017/MovieDB';
 
+const PORT = process.env.PORT ?? 4000;
+
 const server = express();
 
 server.use(bodyParser.json());
@@ -72,6 +74,6 @@ server.use((error, req, res, next) => {
 
 mongoose.connect(dbConnectLocal)
 .then(() => {
-    server.listen(4000, () => console.log('DB Connected'));
+    server.listen(PORT, () => console.log('DB Connected'));
 })
 .catch(err => console.log(err));
