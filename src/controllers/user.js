@@ -36,8 +36,6 @@ exports.createUser = async (req, res, next) => {
 
     const image = req.file.path;
     const hashedPassword = await bcrypt.hash(password, 12);
-    // console.log(hashedPassword)
-
     const Users = new User({
         fullname        : fullname,
         email           : email,
@@ -59,23 +57,16 @@ exports.createUser = async (req, res, next) => {
         } else {
             Users.save()
             .then((result) => {
-                const token = jwt.sign(
-                    { email: result.email, id: result._id },  
-                    process.env.ACCESS_TOKEN,
-                    { expiresIn: "1h" }
-                );
-
                 res.status(201).json({
                     message: "Create successed!",
                     data: result,
-                    token: token,
                 });
-                // next();
             })
             .catch(err => {
                 cleanImage(req.file.path);
                 res.status(400).json({
                     message: "Error!",
+                    data: err
                 });
                 // next(err);
             });

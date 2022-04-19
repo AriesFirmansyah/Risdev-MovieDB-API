@@ -30,6 +30,10 @@ const User = new Schema({
         type: String,
         required: true
     },
+    google: {
+        type: Boolean,
+        required: false
+    }
 }, {
     timestamps: true,
 })

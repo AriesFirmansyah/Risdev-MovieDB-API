@@ -9,4 +9,8 @@ DONE 4.  When update, check image to deleted, whether there are
          other user using the same name or not
          
 DONE 5.  Validation Middleware
+
+
 6. Validation Email (isCorrect)
+7. Create account when first login with google or facebook
+
