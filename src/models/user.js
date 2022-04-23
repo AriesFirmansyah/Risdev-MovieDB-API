@@ -8,6 +8,7 @@ const User = new Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true
     },
     password: {
@@ -31,6 +32,10 @@ const User = new Schema({
         required: true
     },
     google: {
+        type: Boolean,
+        required: false
+    },
+    facebook: {
         type: Boolean,
         required: false
     }

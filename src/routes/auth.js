@@ -14,6 +14,7 @@ router.post('/login',
     authController.login
 );
 
-router.post('/others-login', authController.othersLogin);
+router.post('/google-login', authController.googleAuthentication);
+router.post('/facebook-login', authController.facebookAuthentication);
 
 module.exports = router;

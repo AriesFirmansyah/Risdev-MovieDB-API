@@ -34,7 +34,7 @@ exports.createUser = async (req, res, next) => {
         region 
     } = req.body;
 
-    const image = req.file.path;
+    const image = 'http://localhost:4000/' + req.file.path;
     const hashedPassword = await bcrypt.hash(password, 12);
     const Users = new User({
         fullname        : fullname,
