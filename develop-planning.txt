@@ -12,5 +12,6 @@ DONE 5.  Validation Middleware
 
 
 6. Validation Email (isCorrect)
-7. Create account when first login with google or facebook
+
+DONE 7.  Create account when first login with google or facebook
 

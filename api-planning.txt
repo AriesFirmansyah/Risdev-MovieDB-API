@@ -20,24 +20,30 @@ ex : http://localhost:4000/v1/auth/login
 {root.api}/{version}/auth/register
 
 req : {
-    "name": "Aries Firmansyah",
+    "fullname": "Aries Firmansyah",
     "email": "aries@gmail.com",
     "password": "1234",
-    "no_telp": "01234",
-    "pekerjaan": "mahasiswa",
-    "asal_kota": "tangerang"
+    "phone_number": "01234",
+    "image": "file"
+    "occupation": "mahasiswa",
+    "region": "tangerang",
+    "google": boolean,
+    "facebook": boolean,
 }
 
 res : {
     "message": "Register Success",
     "data": {
         "id": 1,
-        "name": "Aries Firmansyah",
+        "fullname": "Aries Firmansyah",
         "email": "aries@gmail.com",
         "password": "1234",
-        "no_telp": "01234",
-        "pekerjaan": "mahasiswa",
-        "asal_kota": "tangerang",
+        "phone_number": "01234",
+        "image": "file"
+        "occupation": "mahasiswa",
+        "region": "tangerang",
+        "google": boolean,
+        "facebook": boolean,
     }
 }
 
@@ -49,15 +55,19 @@ error-response
 {root.api}/{version}/auth/login
 
 req : {
-    "email or phone number": "aries@gmail.com",
+    "email": "aries@gmail.com",
     "password": "1234",
 }
 
 res : {
-    "message": "Register Success",
+    "message": "Login successed",
     "data": {
-        "email or phone number": "aries@gmail.com",
-        "password": "1234",
+        "fullname": "Aries Firmansyah",
+        "email": "aries@gmail.com",
+        "phone_number": "01234",
+        "image": "file"
+        "occupation": "mahasiswa",
+        "region": "tangerang",
     }
 }
 
