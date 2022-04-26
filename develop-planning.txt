@@ -10,8 +10,7 @@ DONE 4.  When update, check image to deleted, whether there are
          
 DONE 5.  Validation Middleware
 
-
-6. Validation Email (isCorrect)
+DONE 6.  Validation Email (isCorrect)
 
 DONE 7.  Create account when first login with google or facebook
 

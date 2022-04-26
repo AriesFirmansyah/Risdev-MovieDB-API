@@ -17,14 +17,18 @@ const client = new OAuth2Client(process.env.OAuth2Client);
 
 const axios = require('axios');
 
+const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 exports.login = async (req, res, next) => {
     const email = req?.body?.data?.email ?? null;
-    const password  = req?.body?.data?.password ?? null;
+    const password  = req?.body?.data?.password?.toString() ?? null;
 
-    
     if (email && password !== null) {
         try {
+            if(!emailRegexp.test(email)) return res.status(404).json({
+                message: "Email doesn't valid!"
+            })
+
             const exist = await User.findOne({ email });
     
             if(!exist) return res.status(404).json({
@@ -57,7 +61,7 @@ exports.login = async (req, res, next) => {
                 isAuth: true
             })
         } catch (err) {
-            res.status(500).json({ message: "Something went wrong! "});
+            res.status(500).json({ message: "Something went wrong! Please relogin."});
         }
     } else {
         res.status(500).json({ message: "Something went wrong! "});
