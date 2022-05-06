@@ -9,10 +9,7 @@ const fs = require('fs');
 
 const usersRoutes = require('./src/routes/user');
 const authRoutes = require('./src/routes/auth');
-const movieRoutes = require('./src/routes/movies');
-
-const dbConnectAtlas = 'mongodb+srv://ariesfirmansyah:rH2gCOAzVtg6px3a@cluster0.uuvaw.mongodb.net/MovieDB?retryWrites=true&w=majority';
-const dbConnectLocal = 'mongodb://localhost:27017/MovieDB';
+const movieRoutes = require('./src/routes/movie');
 
 const PORT = process.env.PORT ?? 4000;
 
@@ -58,7 +55,7 @@ server.use((req, res, next) => {
 
 server.use('/v1/user', usersRoutes);
 server.use('/v1/auth', authRoutes);
-server.use('/v1/movies', movieRoutes);
+server.use('/v1/movie', movieRoutes);
 
 // Error Message
 server.use((error, req, res, next) => {
@@ -72,7 +69,7 @@ server.use((error, req, res, next) => {
     })
 });
 
-mongoose.connect(dbConnectLocal)
+mongoose.connect(process.env.DB_CONNECT_LOCAL)
 .then(() => {
     server.listen(PORT, () => console.log('DB Connected'));
 })

@@ -34,7 +34,7 @@ exports.createUser = async (req, res, next) => {
         region 
     } = req.body;
 
-    const image = 'http://localhost:4000/' + req.file.path;
+    const image = process.env.BASE_URL_LOCAL + req.file.path;
     const hashedPassword = await bcrypt.hash(password, 12);
     const Users = new User({
         fullname        : fullname,
@@ -44,6 +44,8 @@ exports.createUser = async (req, res, next) => {
         image           : image,
         occupation      : occupation,
         region          : region,
+        google          : false,
+        facebook        : false
     });
 
     User.find({ email }).countDocuments()
@@ -196,8 +198,6 @@ exports.updateUser = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     const uid = req.params.userid;
 
-    // console.log(uid);
-
     User.findById(uid)
     .then((user) => {
         if (!user) {
@@ -222,7 +222,7 @@ exports.deleteUser = (req, res, next) => {
 const cleanImage = (filePath) => {
     filePath = path.join(__dirname, '../..', filePath);
     fs.unlink(filePath, (err) => {
-        console.log(err)
+        console.log(err);
     });
 }
 
