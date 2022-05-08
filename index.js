@@ -69,7 +69,7 @@ server.use((error, req, res, next) => {
     })
 });
 
-mongoose.connect(process.env.DB_CONNECT_LOCAL)
+mongoose.connect(process.env.DB_CONNECT_ATLAS)
 .then(() => {
     server.listen(PORT, () => console.log('DB Connected'));
 })

@@ -20,9 +20,9 @@ exports.createUser = async (req, res, next) => {
     }
 
     if(!req.file) {
-        const err = new Error('Image harus di upload');
-        err.ErrorStatus = 422;
-        throw err;
+        res.status(422).json({
+            message: "Image must be uploaded!"
+        });
     }
 
     const { 
