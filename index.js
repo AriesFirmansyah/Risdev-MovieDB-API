@@ -57,6 +57,10 @@ server.use('/v1/user', usersRoutes);
 server.use('/v1/auth', authRoutes);
 server.use('/v1/movie', movieRoutes);
 
+server.use('/', (req, res, next) => {
+    res.send("Accessed");
+});
+
 // Error Message
 server.use((error, req, res, next) => {
     const status = error.errorStatus || 500;
