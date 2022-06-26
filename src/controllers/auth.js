@@ -128,12 +128,12 @@ exports.googleAuthentication = (req, res, next) => {
                 res.status(201).json({
                     message: "Login successed!",
                     profile: {
-                        fullname: exist.fullname,
-                        email: exist.email,
-                        phone_number: exist.phone_number,
-                        image : exist.image,
-                        occupation: exist.occupation,
-                        region: exist.region,
+                        fullname: createSuccessed.fullname,
+                        email: createSuccessed.email,
+                        phone_number: createSuccessed.phone_number,
+                        image : createSuccessed.image,
+                        occupation: createSuccessed.occupation,
+                        region: createSuccessed.region,
                     }, 
                     token: token,
                     isAuth: true
